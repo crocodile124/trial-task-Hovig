@@ -42,13 +42,12 @@ export default function RegisterPage() {
       });
 
       setLoading(false);
-
       if (!res.ok) {
-        setError("Server doesn't reply");
+        setError((await res.json()).message);
         return;
       }
 
-      const [message] = await Promise.all([res.json()])
+      const [message] = await Promise.all([res.json()]);
       console.log(message);
       if (message.msg == "Success") {
         signIn(undefined, { callbackUrl: "/" });
@@ -68,7 +67,7 @@ export default function RegisterPage() {
     setFormValues({ ...formValues, [name]: value });
   };
   return (
-    <div className="flex font-poppins items-center justify-center dark:bg-gray-900 min-w-screen min-h-screen">
+    <div className="flex font-poppins items-center justify-center dark:bg-gray-900 min-w-screen h-[92vh]">
       <div className="grid gap-8">
         <div
           id="back-div"

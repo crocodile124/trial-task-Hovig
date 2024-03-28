@@ -1,5 +1,13 @@
-import Header from "@/components/Header";
+"use client";
 
-export default async function Index() {
-  return <div>This is Home Page. It will be redirected to /login</div>;
+import { useSession } from "next-auth/react";
+
+export default function Index() {
+  const { data: session } = useSession();
+  const user = session?.user;
+  return (
+    <>
+      {!user && <span>No</span>}
+    </>
+  );
 }

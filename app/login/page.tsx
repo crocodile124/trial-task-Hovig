@@ -14,7 +14,7 @@ export default function Login() {
   });
   const [error, setError] = useState("");
 
-  const callbackUrl = "/dashboard";
+  const callbackUrl = "/";
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,10 +29,11 @@ export default function Login() {
     });
 
     setLoading(false);
+    console.log(res);
     if (!res?.error) {
       router.push(callbackUrl);
     } else {
-      setError("Incorrect email or password");
+      setError("invalid email or password");
     }
   };
 
@@ -43,61 +44,7 @@ export default function Login() {
   };
 
   return (
-    // <section className="bg-ct-blue-600 min-h-screen">
-    //   <div className="login relative">
-    //     <img src="/img/login-bg.png" alt="image" className="login__bg" />
-
-    //     <form onSubmit={onSubmit} className="login__form">
-    //       <h1 className="login__title">Login</h1>
-
-    //       <div className="login__inputs">
-    //         {error && (
-    //           <p className="text-center bg-red-300 py-4 mb-6 rounded">
-    //             {error}
-    //           </p>
-    //         )}
-    //         <div className="login__box">
-    //           <input
-    //             name="email"
-    //             onChange={handleChange}
-    //             value={formValues.email}
-    //             type="email"
-    //             placeholder="Email ID"
-    //             required
-    //             className="login__input bg-transparent"
-    //           />
-    //           <i className="ri-mail-fill"></i>
-    //         </div>
-
-    //         <div className="login__box">
-    //           <input
-    //             type="password"
-    //             onChange={handleChange}
-    //             value={formValues.password}
-    //             name="password"
-    //             placeholder="Password"
-    //             required
-    //             className="login__input"
-    //           />
-    //           <i className="ri-lock-2-fill"></i>
-    //         </div>
-    //       </div>
-    //       <button
-    //         disabled={loading}
-    //         type="submit"
-    //         className="login__button mt-6"
-    //       >
-    //         {loading ? "loading..." : "Sign In"}
-    //       </button>
-
-    //       <div className="login__register">
-    //         Don't have an account? <Link href="/register">Register</Link>
-    //       </div>
-    //     </form>
-    //   </div>
-    // </section>
-
-    <div className="flex font-poppins items-center justify-center dark:bg-gray-900 min-w-screen min-h-screen">
+    <div className="flex font-poppins items-center justify-center dark:bg-gray-900 min-w-screen h-[92vh]">
       <div className="grid gap-8">
         <div
           id="back-div"
