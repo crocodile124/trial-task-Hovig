@@ -11,6 +11,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import { Account } from "./Account";
+import { Button } from "../ui/button";
 
 const queryClient = new QueryClient();
 const config = getDefaultConfig({
@@ -24,17 +25,30 @@ export default function ConnectWallet() {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
+        {/* <Account /> */}
         <RainbowKitProvider coolMode>
-          <ConnectButton
-            showBalance={{
-              smallScreen: false,
-              largeScreen: false,
+          <ConnectButton.Custom>
+            {({ account, chain, authenticationStatus, mounted }) => {
+              const ready = mounted && authenticationStatus !== "loading";
+              const connected =
+                ready &&
+                account &&
+                chain &&
+                (!authenticationStatus ||
+                  authenticationStatus === "authenticated");
+              return (
+                <div>
+                  {(() => {
+                    if (!connected) {
+                      return <ConnectButton />;
+                    }
+                    return <Account />;
+                  })()}
+                </div>
+              );
             }}
-            accountStatus="address"
-            chainStatus="none"
-          />
+          </ConnectButton.Custom>
         </RainbowKitProvider>
-        <Account />
       </QueryClientProvider>
     </WagmiProvider>
   );

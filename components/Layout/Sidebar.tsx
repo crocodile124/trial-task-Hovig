@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import ConnectWallet from "@/components/wallet/ConnectWallet";
 import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function Sidebar({ show, setter }: any) {
   const { data: session } = useSession();
@@ -26,14 +25,6 @@ export default function Sidebar({ show, setter }: any) {
       <div className={`${className}${appendClass}`}>
         <div className="h-full w-full">
           <div className="h-1/3 flex flex-col items-center justify-center ">
-            <Avatar className="w-[150px] h-[150px] mb-3">
-              <AvatarImage
-                src="https://github.com/shadcn.png"
-                alt="ensAvatar"
-              />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-
             <ConnectWallet />
           </div>
           <div className="h-1/3 flex items-center justify-center">

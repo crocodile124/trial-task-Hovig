@@ -25,7 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { DataTablePagination } from "./table-pagination";
+import { DataTablePagination } from "./tablePagination";
 
 const data: Payment[] = [
   {
