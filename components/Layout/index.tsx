@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import { MyTable } from "../table/table";
 
-export default function Dashboard() {
+export default function Layout() {
   const [showSidebar, setShowSidebar] = useState(false);
 
   return (
