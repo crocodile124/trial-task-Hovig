@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import Layout from "../components/layout";
+import Dashboard from "../components/layout/Dashboard";
 
 export default function Index() {
   const { data: session } = useSession();
@@ -30,7 +30,7 @@ export default function Index() {
           </div>
         </div>
       ) : (
-        <Layout />
+        <Dashboard />
       )}
     </>
   );
