@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { ChangeEvent, useState, useEffect, useCallback } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
@@ -49,10 +52,10 @@ export default function RegisterPage() {
 
       const [message] = await Promise.all([res.json()]);
       console.log(message);
-      if (message.msg == "Success") {
+      if (message.message == "Success") {
         signIn(undefined, { callbackUrl: "/" });
       } else {
-        setError(message.msg);
+        setError(message.message);
         return;
       }
     } catch (error: any) {
@@ -67,8 +70,8 @@ export default function RegisterPage() {
     setFormValues({ ...formValues, [name]: value });
   };
   return (
-    <div className="flex font-poppins items-center justify-center dark:bg-gray-900 min-w-screen h-[92vh]">
-      <div className="grid gap-8">
+    <div className="flex font-poppins items-center justify-center dark:bg-gray-900 min-w-screen min-h-screen">
+      <div className="grid gap-8 w-[500px]">
         <div
           id="back-div"
           className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-[26px] m-4 "
@@ -78,16 +81,16 @@ export default function RegisterPage() {
               Sign Up
             </h1>
             {error && (
-              <p className="text-center bg-red-300 py-4 mb-6 rounded">
+              <p className="text-center text-red-500 bg-white py-4 rounded w-full">
                 {error}
               </p>
             )}
             <form onSubmit={onSubmit} className="space-y-4">
               <div>
-                <label className="mb-2 dark:text-gray-400 text-lg">
+                <Label className="mb-2 dark:text-gray-400 text-lg font-normal">
                   Email <span className="text-red-500">*</span>
-                </label>
-                <input
+                </Label>
+                <Input
                   className="border dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 p-3 shadow-md placeholder:text-base border-gray-300 rounded-lg w-full focus:scale-105 ease-in-out duration-300"
                   type="email"
                   name="email"
@@ -98,10 +101,10 @@ export default function RegisterPage() {
                 />
               </div>
               <div>
-                <label className="mb-2 dark:text-gray-400 text-lg">
+                <Label className="mb-2 dark:text-gray-400 text-lg">
                   Password <span className="text-red-500">*</span>
-                </label>
-                <input
+                </Label>
+                <Input
                   name="password"
                   className="border dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 p-3 mb-2 shadow-md placeholder:text-base border-gray-300 rounded-lg w-full focus:scale-105 ease-in-out duration-300"
                   type="password"
@@ -112,10 +115,10 @@ export default function RegisterPage() {
                 />
               </div>
               <div>
-                <label className="mb-2 dark:text-gray-400 text-lg">
+                <Label className="mb-2 dark:text-gray-400 text-lg">
                   Confirm Password <span className="text-red-500">*</span>
-                </label>
-                <input
+                </Label>
+                <Input
                   onChange={handleChange}
                   value={formValues.confirmpassword}
                   name="confirmpassword"
@@ -126,10 +129,10 @@ export default function RegisterPage() {
                 />
               </div>
               <div>
-                <label className="mb-2 dark:text-gray-400 text-lg">
+                <Label className="mb-2 dark:text-gray-400 text-lg">
                   Address <span className="text-red-500">*</span>
-                </label>
-                <input
+                </Label>
+                <Input
                   name="address"
                   onChange={handleChange}
                   value={formValues.address}
@@ -139,13 +142,9 @@ export default function RegisterPage() {
                   required
                 />
               </div>
-              <button
-                className="bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg mt-6 p-2 text-white rounded-lg w-full hover:scale-105 hover:from-purple-500 hover:to-blue-500 transition duration-300 ease-in-out"
-                type="submit"
-                disabled={loading}
-              >
-                {loading ? "SIGNING UP..." : "SIGN UP"}
-              </button>
+              <Button className="text-white" type="submit" disabled={loading}>
+                {loading ? "Signing Up..." : "Sign Up"}
+              </Button>
             </form>
             <div className="flex flex-col mt-4 items-center justify-center text-sm">
               <h3>

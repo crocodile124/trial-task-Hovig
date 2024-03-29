@@ -1,17 +1,17 @@
 // @/components/Layout/Sidebar.js
 import { signOut } from "next-auth/react";
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
-import ConnectWallet from "@/components/ConnectWallet";
+import ConnectWallet from "@/components/wallet/ConnectWallet";
 import { Button } from "../ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function Sidebar({ show, setter }: any) {
   const { data: session } = useSession();
   const user = session?.user;
   const className =
-    "bg-white w-[300px] transition-[margin-left] ease-in-out duration-500 fixed md:static top-0 bottom-0 left-0 z-40 text-black h-screen rounded-r-2xl";
-  const appendClass = show ? " ml-0" : " ml-[-300px] md:ml-0";
+    "bg-white w-[300px] transition-[margin-left] ease-in-out duration-500 fixed lg:static top-0 bottom-0 left-0 z-40 text-black h-screen";
+  const appendClass = show ? " ml-0" : " ml-[-300px] lg:ml-0";
 
   const ModalOverlay = () => (
     <div
@@ -27,9 +27,15 @@ export default function Sidebar({ show, setter }: any) {
       <div className={`${className}${appendClass}`}>
         <div className="h-full w-full">
           <div className="h-1/3 flex flex-col items-center justify-center ">
-            <img src="" className="rounded-[50%] w-28 h-28 mb-5" />
+            <Avatar className="w-[150px] h-[150px] mb-3">
+              <AvatarImage
+                src="https://github.com/shadcn.png"
+                alt="ensAvatar"
+              />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+
             <ConnectWallet />
-            {/* <span>Wallet/Ens</span> */}
           </div>
           <div className="h-1/3 flex items-center justify-center">
             <svg
@@ -86,21 +92,11 @@ export default function Sidebar({ show, setter }: any) {
               Dashboard
             </span>
           </div>
-          <div className="h-1/3 flex items-end justify-center pb-10">
-            {user ? (
-              <Button
-                className="bg-black text-white w-full mx-6"
-                onClick={() => signOut()}
-              >
+          <div className="h-1/3 flex items-end justify-center pb-8">
+            {user && (
+              <Button className="text-white mx-8" onClick={() => signOut()}>
                 Logout
               </Button>
-            ) : (
-              <div className="flex flex-col text-white">
-                <Link href="/login" className="bg-black px-10 py-2 rounded-md my-4">
-                  Sign In
-                </Link>
-                <Link href="/register" className="bg-black px-10 py-2 rounded-md">Sign Up</Link>
-              </div>
             )}
           </div>
         </div>

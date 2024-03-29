@@ -1,14 +1,15 @@
 // @/components/Layout/MenuBarMobile.js
 import React from "react";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 export default function MenuBarMobile({ setter }: any) {
   return (
     <nav className="z-20 h-[60px] bg-gray-700 flex items-center justify-between w-full">
-      <ul className="text-white text-lg flex items-center justify-between w-[300px] ml-5">
+      <ul className="text-white text-lg flex items-center justify-between w-[300px] mx-5">
         <li className="md:hidden">
-          <button
-            className="text-4xl flex text-white"
+          <Button
+            className="text-4xl flex text-white bg-none m-0"
             onClick={() => {
               setter((oldVal: any) => !oldVal);
             }}
@@ -60,9 +61,9 @@ export default function MenuBarMobile({ setter }: any) {
                 d="M43,39H5c-1.1,0-2-0.9-2-2v-2c0-1.1,0.9-2,2-2h38c1.1,0,2,0.9,2,2v2C45,38.1,44.1,39,43,39z"
               />
             </svg>
-          </button>
+          </Button>
         </li>
-        <li>All</li>
+        <li className="ml-2">All</li>
         <li>Uniswap</li>
         <li>Pancakeswap</li>
       </ul>

@@ -5,6 +5,9 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      'lg': '1140px',
+    },
     extend: {
       colors: {
         background: "hsl(var(--background))",
