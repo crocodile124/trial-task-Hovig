@@ -1,4 +1,3 @@
-// @/components/Layout/MenuBarMobile.js
 import React from "react";
 import Link from "next/link";
 import { Button } from "../ui/button";

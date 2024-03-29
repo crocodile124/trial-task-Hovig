@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import Dashboard from "../components/layout/Dashboard";
+import Dashboard from "@/components/layout/Dashboard";
 
 export default function Index() {
   const { data: session } = useSession();
