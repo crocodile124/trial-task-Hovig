@@ -2,7 +2,6 @@
 
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-import Layout from "@/components/layout";
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
