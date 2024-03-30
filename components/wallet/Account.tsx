@@ -9,7 +9,7 @@ export function Account() {
     address: address,
   });
   const ensAvatar = useEnsAvatar({
-    name: normalize("wevm.eth"),
+    name: normalize(ensName.data as string ? ensName.data as string : ""),
   });
 
   return (
@@ -21,7 +21,7 @@ export function Account() {
               src={ensAvatar.data ? ensAvatar.data : ""}
               alt="ensAvatar"
             />
-            <AvatarFallback>ENS Avatar</AvatarFallback>
+            <AvatarFallback>No ENS Avatar</AvatarFallback>
           </Avatar>
           <span className="font-bold text-pink-500">
             {connector?.name} / {ensName.data ? ensName.data : "No ENS name"}

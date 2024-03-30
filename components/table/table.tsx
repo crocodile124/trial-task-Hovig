@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useCallback, useEffect } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -26,255 +27,73 @@ import {
   TableRow,
 } from "../ui/table";
 import { DataTablePagination } from "./tablePagination";
+import { Label } from "../ui/label";
+import { fetchTableData } from "./fetchData";
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-];
-
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
+export type DataType = {
+  token0: {
+    symbol: string;
+  };
+  token1: {
+    symbol: string;
+  };
+  txCount: string;
+  volumeUSD: string;
+  liquidity: string;
+  totalValueLockedUSD: string;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<DataType>[] = [
   {
-    accessorKey: "token",
-    header: "TOKEN",
+    accessorKey: "token0.symbol",
+    header: "TOKEN 0",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.original.token0.symbol}</div>
     ),
   },
   {
-    accessorKey: "price",
-    header: ({ column }) => {
-      return (
-        <Button
-          className="m-0 bg-none text-black shadow-none hover:scale-100"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          PRICE
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    accessorKey: "token1.symbol",
+    header: "TOKEN 1",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.original.token1.symbol}</div>
+    ),
   },
   {
-    accessorKey: "txns",
-    header: "TXNS",
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    accessorKey: "totalValueLockedUSD",
+    header: "AMOUNT",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("totalValueLockedUSD")}</div>
+    ),
   },
   {
-    accessorKey: "volume",
+    accessorKey: "txCount",
+    header: "TXN",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("txCount")}</div>
+    ),
+  },
+  {
+    accessorKey: "volumeUSD",
     header: "VOLUME",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "token",
-    header: "TOKEN",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "makers",
-    header: "MAKERS",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "5M",
-    header: "5M",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "1H",
-    header: "1H",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "6H",
-    header: "6H",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "24H",
-    header: "24H",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("volumeUSD")}</div>
     ),
   },
   {
     accessorKey: "liquidity",
     header: "LIQUIDITY",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "fdv",
-    header: "FDV",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("liquidity")}</div>
     ),
   },
 ];
 
 export function MyTable({ setter }: any) {
   const [displayType, setDisplayType] = useState("All");
+  const [data, setData] = useState<DataType[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,
@@ -286,22 +105,43 @@ export function MyTable({ setter }: any) {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection,
     },
   });
 
+  const fetchData = useCallback(async () => {
+    try {
+      setData([]);
+      const uniswapData: any = await fetchTableData("uniswap/uniswap-v3");
+      const pancakeswapData: any = await fetchTableData(
+        "pancakeswap/exchange-v3-eth"
+      );
+      if (displayType == "All")
+        setData([...uniswapData, ...pancakeswapData] as DataType[]);
+      else if (displayType == "Uniswap") setData(uniswapData as DataType[]);
+      else setData(pancakeswapData as DataType[]);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [displayType]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <>
-      <nav className="z-20 h-[60px] bg-gray-700 flex items-center justify-between w-full">
-        <ul className="text-white text-lg flex items-center justify-between w-[300px] mx-5">
+      <nav className="z-20 h-[80px] bg-gray-700 flex items-center justify-between w-full">
+        <ul className="text-white text-lg flex items-center justify-between w-[300px] mx-3">
           <li className="lg:hidden">
             <Button
-              className="text-4xl flex text-white bg-none m-0"
+              className="text-4xl flex text-white bg-none m-0 shadow-none"
               onClick={() => {
                 setter((oldVal: any) => !oldVal);
               }}
@@ -355,18 +195,36 @@ export function MyTable({ setter }: any) {
               </svg>
             </Button>
           </li>
-          <li className="ml-2">All</li>
-          <li>Uniswap</li>
-          <li>Pancakeswap</li>
+          <li
+            className="ml-2 lg:ml-8 cursor-pointer"
+            onClick={() => setDisplayType("All")}
+          >
+            All
+          </li>
+          <li
+            className="cursor-pointer"
+            onClick={() => setDisplayType("Uniswap")}
+          >
+            Uniswap
+          </li>
+          <li
+            className="cursor-pointer"
+            onClick={() => setDisplayType("Pancakeswap")}
+          >
+            Pancakeswap
+          </li>
         </ul>
       </nav>
       <div className="w-[95%] mx-auto my-auto rounded-xl px-5 py-3 bg-white">
-        <div className="flex items-center py-4 justify-end">
+        <div className="flex items-center py-4 justify-between">
+          <Label className="text-3xl font-bold ml-7">{displayType}</Label>
           <Input
-            placeholder="Filter emails..."
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+            placeholder="Filter by TXN"
+            value={
+              (table.getColumn("token0.symbol")?.getFilterValue() as string) ?? ""
+            }
             onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
+              table.getColumn("txCount")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
@@ -420,7 +278,7 @@ export function MyTable({ setter }: any) {
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    Loading Data...
                   </TableCell>
                 </TableRow>
               )}

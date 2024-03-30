@@ -78,7 +78,7 @@ export default function Sidebar({ show, setter }: any) {
               </g>
             </svg>
             <span className="text-lg ml-1">
-              <span className="text-3xl font-sans font-bold">Dex</span>{" "}
+              <span className="text-3xl font-sans font-bold">DEX</span>{" "}
               Dashboard
             </span>
           </div>

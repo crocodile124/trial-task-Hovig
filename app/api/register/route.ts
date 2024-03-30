@@ -7,7 +7,6 @@ export async function POST(req: NextRequest) {
     const prisma = new PrismaClient();
 
     const { email, password, address } = (await req.json()) as {
-      name: string;
       email: string;
       password: string;
       address: string;
