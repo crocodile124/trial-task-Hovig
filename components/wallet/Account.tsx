@@ -9,7 +9,7 @@ export function Account() {
     address: address,
   });
   const ensAvatar = useEnsAvatar({
-    name: normalize(ensName.data as string ? ensName.data as string : ""),
+    name: normalize((ensName.data as string) ? (ensName.data as string) : ""),
   });
 
   return (
@@ -17,10 +17,7 @@ export function Account() {
       {isConnected && (
         <div className=" items-center justify-center flex flex-col">
           <Avatar className="w-[150px] h-[150px] mb-3 border ">
-            <AvatarImage
-              src={ensAvatar.data ? ensAvatar.data : ""}
-              alt="ensAvatar"
-            />
+            <AvatarImage src={ensAvatar.data ? ensAvatar.data : ""} alt="ensAvatar" />
             <AvatarFallback>No ENS Avatar</AvatarFallback>
           </Avatar>
           <span className="font-bold text-pink-500">

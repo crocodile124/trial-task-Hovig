@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { ChangeEvent, useState, useEffect, useCallback } from "react";
+import { ChangeEvent, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { RegisterUser } from "@/lib/fetchData";
 
 export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
@@ -36,13 +37,7 @@ export default function RegisterPage() {
       setLoading(false);
     }
     try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        body: JSON.stringify(formValues),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await RegisterUser(formValues);
 
       setLoading(false);
       if (!res.ok) {
@@ -51,7 +46,6 @@ export default function RegisterPage() {
       }
 
       const [message] = await Promise.all([res.json()]);
-      console.log(message);
       if (message.message == "Success") {
         signIn(undefined, { callbackUrl: "/" });
       } else {
@@ -72,10 +66,7 @@ export default function RegisterPage() {
   return (
     <div className="flex font-poppins items-center justify-center dark:bg-gray-900 min-w-screen min-h-screen">
       <div className="grid gap-8 w-[500px]">
-        <div
-          id="back-div"
-          className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-[26px] m-4 "
-        >
+        <div id="back-div" className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-[26px] m-4">
           <div className="border-[20px] border-transparent rounded-[20px] dark:bg-gray-900 bg-white shadow-lg xl:p-10 2xl:p-10 lg:p-10 md:p-10 sm:p-2 m-2">
             <h1 className="pt-8 pb-6 font-bold text-5xl dark:text-gray-400 text-center cursor-default">
               Sign Up
@@ -151,10 +142,7 @@ export default function RegisterPage() {
                 <span className="cursor-default dark:text-gray-300">
                   Have an account?
                 </span>
-                <Link
-                  className="group text-blue-400 transition-all duration-100 ease-in-out"
-                  href="/login"
-                >
+                <Link href="/login" className="group text-blue-400 transition-all duration-100 ease-in-out">
                   <span className="bg-left-bottom ml-1 bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
                     Sign In
                   </span>

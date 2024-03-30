@@ -14,7 +14,6 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
-  const pageSizes = [10, 20, 30, 40, 50];
   return (
     <div className="flex items-center px-2 my-3 justify-end space-x-6 lg:space-x-8">
       <div className="flex w-[100px] items-center justify-center text-sm font-medium">

@@ -5,13 +5,12 @@ import {
   getDefaultConfig,
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
-import { useAccount, WagmiProvider } from "wagmi";
+import { WagmiProvider } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import { Account } from "./Account";
-import { Button } from "../ui/button";
 
 const queryClient = new QueryClient();
 const config = getDefaultConfig({
@@ -25,7 +24,6 @@ export default function ConnectWallet() {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        {/* <Account /> */}
         <RainbowKitProvider coolMode>
           <ConnectButton.Custom>
             {({ account, chain, authenticationStatus, mounted }) => {

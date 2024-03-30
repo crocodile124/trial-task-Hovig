@@ -32,7 +32,6 @@ export default function Login() {
     });
 
     setLoading(false);
-    console.log(res);
     if (!res?.error) {
       router.push(callbackUrl);
     } else {
@@ -49,10 +48,7 @@ export default function Login() {
   return (
     <div className="flex font-poppins items-center justify-center dark:bg-gray-900 min-w-screen min-h-screen">
       <div className="grid gap-8 w-[500px]">
-        <div
-          id="back-div"
-          className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-[26px] m-4"
-        >
+        <div id="back-div" className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-[26px] m-4">
           <div className="border-[20px] border-transparent rounded-[20px] dark:bg-gray-900 bg-white shadow-lg xl:p-10 2xl:p-10 lg:p-10 md:p-10 sm:p-2 m-2">
             <h1 className="pt-8 pb-6 font-bold text-5xl dark:text-gray-400 text-center cursor-default">
               Sign In
@@ -96,10 +92,7 @@ export default function Login() {
                 <span className="cursor-default dark:text-gray-300">
                   Don't have an account?
                 </span>
-                <Link
-                  className="group text-blue-400 transition-all duration-100 ease-in-out"
-                  href="/register"
-                >
+                <Link href="/register" className="group text-blue-400 transition-all duration-100 ease-in-out">
                   <span className="bg-left-bottom ml-1 bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
                     Sign Up
                   </span>
