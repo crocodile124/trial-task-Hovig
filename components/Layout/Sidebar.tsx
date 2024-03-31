@@ -1,6 +1,6 @@
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
-import ConnectWallet from "@/components/Wallet";
+import ConnectWallet from "@/components/WalletConnection";
 import { Button } from "../ui/button";
 
 export default function Sidebar({ show, setter }: any) {
