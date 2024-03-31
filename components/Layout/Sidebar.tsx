@@ -36,7 +36,7 @@ export default function Sidebar({ show, setter }: any) {
           <div className="h-1/3 flex items-end justify-center pb-8">
             {user && (
               <Button className="text-white mx-8" onClick={() => signOut()}>
-                Logout
+                Sign Out
               </Button>
             )}
           </div>

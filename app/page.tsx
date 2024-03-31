@@ -7,6 +7,7 @@ import Dashboard from "../components/Layout";
 export default function Index() {
   const { data: session } = useSession();
   const user = session?.user;
+
   return (
     <div>
       {!user ? (

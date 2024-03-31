@@ -17,23 +17,23 @@ export default function Login() {
   });
   const [error, setError] = useState("");
 
-  const callbackUrl = "/";
-
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setFormValues({ email: "", password: "" });
+
+    setLoading(true);
 
     const res = await signIn("credentials", {
       redirect: false,
       email: formValues.email,
       password: formValues.password,
-      callbackUrl,
+      callbackUrl: "/"
     });
 
     setLoading(false);
+
     if (!res?.error) {
-      router.push(callbackUrl);
+      router.push("/");
     } else {
       setError("Invalid email or password");
     }

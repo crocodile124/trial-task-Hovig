@@ -1,12 +1,12 @@
 "use client";
 
+import { ChangeEvent, useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { ChangeEvent, useState } from "react";
+import { RegisterUser } from "@/lib/fetchData";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { RegisterUser } from "@/lib/fetchData";
 
 export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
@@ -20,26 +20,34 @@ export default function RegisterPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setFormValues({
       email: "",
       password: "",
       confirmpassword: "",
       address: "",
     });
+
+    setLoading(true);
+
+    // check password confirmation
     if (formValues.password != formValues.confirmpassword) {
       setError("Incorrect Password");
       setLoading(false);
       return;
     }
+
+    // check address vaildation
     if (formValues.address == null) {
       setError("Please input address");
       setLoading(false);
+      return;
     }
+
     try {
       const res = await RegisterUser(formValues);
-
       setLoading(false);
+
+      // check register api response
       if (!res.ok) {
         setError((await res.json()).message);
         return;
@@ -47,6 +55,7 @@ export default function RegisterPage() {
 
       const [message] = await Promise.all([res.json()]);
       if (message.message == "Success") {
+        // redirect to main page
         signIn(undefined, { callbackUrl: "/" });
       } else {
         setError(message.message);
@@ -63,6 +72,7 @@ export default function RegisterPage() {
     setError("");
     setFormValues({ ...formValues, [name]: value });
   };
+  
   return (
     <div className="flex font-poppins items-center justify-center dark:bg-gray-900 min-w-screen min-h-screen">
       <div className="grid gap-8 w-[500px]">

@@ -12,9 +12,11 @@ import {
 	getPaginationRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
+import { getTableData } from "@/lib/fetchData";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import {
 	Table,
 	TableBody,
@@ -24,16 +26,10 @@ import {
 	TableRow,
 } from "../ui/table";
 import { TablePagination } from "./TablePagination";
-import { Label } from "../ui/label";
-import { getTableData } from "@/lib/fetchData";
 
 export type DataType = {
-	token0: {
-		symbol: string;
-	};
-	token1: {
-		symbol: string;
-	};
+	token0: string;
+	token1: string;
 	txCount: string;
 	volumeUSD: string;
 	liquidity: string;
@@ -45,21 +41,21 @@ export const columns: ColumnDef<DataType>[] = [
 		accessorKey: "token0",
 		header: "TOKEN 0",
 		cell: ({ row }) => (
-			<div className="capitalize">{row.original.token0.symbol}</div>
+			<div className="capitalize">{row.getValue("token0")}</div>
 		),
 	},
 	{
 		accessorKey: "token1",
 		header: "TOKEN 1",
 		cell: ({ row }) => (
-			<div className="capitalize">{row.original.token1.symbol}</div>
+			<div className="capitalize">{row.getValue("token1")}</div>
 		),
 	},
 	{
 		accessorKey: "totalValueLockedUSD",
 		header: "AMOUNT",
 		cell: ({ row }) => (
-			<div className="capitalize">{row.getValue("totalValueLockedUSD")}</div>
+			<div className="capitalize"><span className="font-bold">$</span>{row.getValue("totalValueLockedUSD")}</div>
 		),
 	},
 	{
@@ -73,14 +69,14 @@ export const columns: ColumnDef<DataType>[] = [
 		accessorKey: "volumeUSD",
 		header: "VOLUME",
 		cell: ({ row }) => (
-			<div className="capitalize">{row.getValue("volumeUSD")}</div>
+			<div className="capitalize"><span className="font-bold">$</span>{row.getValue("volumeUSD")}</div>
 		),
 	},
 	{
 		accessorKey: "liquidity",
 		header: "LIQUIDITY",
 		cell: ({ row }) => (
-			<div className="capitalize">{row.getValue("liquidity")}</div>
+			<div className="capitalize"><span className="font-bold">$</span>{row.getValue("liquidity")}</div>
 		),
 	},
 ];
@@ -88,7 +84,7 @@ export const columns: ColumnDef<DataType>[] = [
 const UNISWAP_URL = "uniswap/uniswap-v3";
 const PANCAKESWAP_URL = "pancakeswap/exchange-v3-eth";
 
-export function MyTable({ setter }: any) {
+export function MyTable({ setter, isConnected }: any) {
 	const [displayType, setDisplayType] = useState("All");
 	const [data, setData] = useState<DataType[]>([]);
 	const [sorting, setSorting] = useState<SortingState>([]);
@@ -113,28 +109,26 @@ export function MyTable({ setter }: any) {
 	});
 
 	const fetchData = async () => {
-		let uniswapData : any, pancakeswapData: any;
+		let uniswapData: any, pancakeswapData: any;
+
+		setData([]);
+		setIsLoading("Loading Data...");
 		switch (displayType) {
 			case "All":
-				setIsLoading("Loading Data...");
 				uniswapData = await getTableData(UNISWAP_URL);
 				pancakeswapData = await getTableData(PANCAKESWAP_URL);
 				setData([...uniswapData, ...pancakeswapData] as DataType[]);
-				setIsLoading("No results!");
 				break;
 			case "Uniswap":
-				setIsLoading("Loading Data...");
 				uniswapData = await getTableData(UNISWAP_URL);
 				setData(uniswapData as DataType[]);
-				setIsLoading("No results!");
 				break;
 			case "Pancakeswap":
-				setIsLoading("Loading Data...");
 				pancakeswapData = await getTableData(PANCAKESWAP_URL);
 				setData(pancakeswapData as DataType[]);
-				setIsLoading("No results!");
 				break;
 		}
+		setIsLoading("No results!");
 	};
 
 	useEffect(() => {
@@ -149,74 +143,88 @@ export function MyTable({ setter }: any) {
 						<Button className="text-4xl flex text-white bg-none m-0 shadow-none" onClick={() => {
 							setter((oldVal: any) => !oldVal);
 						}}>
-							<img src="./img/sidebar-small.png" width="32px" height="32px" className="min-w-8 min-h-8"/>
+							<img src="./img/sidebar-small.png" width="32px" height="32px" className="min-w-8 min-h-8" />
 						</Button>
 					</li>
-					<li className="ml-2 lg:ml-8 cursor-pointer" onClick={() => setDisplayType("All")}>
+					<li className={`ml-2 lg:ml-8 cursor-pointer ${displayType == "All" ? "text-red-500 hover:text-red-500" : "text-white hover:text-blue-500 "}`}
+						onClick={() => setDisplayType("All")}
+					>
 						All
 					</li>
-					<li className="cursor-pointer" onClick={() => setDisplayType("Uniswap")}>
+					<li className={`cursor-pointer ${displayType == "Uniswap" ? "text-red-500 hover:text-red-500" : "text-white hover:text-blue-500 "}`}
+						onClick={() => setDisplayType("Uniswap")}
+					>
 						Uniswap
 					</li>
-					<li className="cursor-pointer" onClick={() => setDisplayType("Pancakeswap")}>
+					<li className={`cursor-pointer ${displayType == "Pancakeswap" ? "text-red-500 hover:text-red-500" : "text-white hover:text-blue-500 "}`}
+						onClick={() => setDisplayType("Pancakeswap")}
+					>
 						Pancakeswap
 					</li>
 				</ul>
 			</nav>
-			<div className="w-[95%] mx-auto my-auto rounded-xl px-5 py-3 bg-white">
-				<div className="flex items-center py-4 justify-between">
-					<Label className="text-3xl font-bold ml-7">{displayType}</Label>
-					<Input className="max-w-sm" placeholder="Filter by TXN"
-						value={(table.getColumn("txCount")?.getFilterValue() as string) ?? ""}
-						onChange={(event) => table.getColumn("txCount")?.setFilterValue(event.target.value)}
-					/>
-				</div>
-				<div className="rounded-md border mb-5">
-					<Table>
-						<TableHeader>
-							{table.getHeaderGroups().map((headerGroup) => (
-								<TableRow key={headerGroup.id}>
-									{headerGroup.headers.map((header) => {
-										return (
-											<TableHead key={header.id} className="border border-gray-200 text-center">
-												{header.isPlaceholder
-													? null
-													: flexRender(
-														header.column.columnDef.header,
-														header.getContext()
-													)}
-											</TableHead>
-										);
-									})}
-								</TableRow>
-							))}
-						</TableHeader>
-						<TableBody className="text-center">
-							{table.getRowModel().rows?.length ? (
-								table.getRowModel().rows.map((row) => (
-									<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-										{row.getVisibleCells().map((cell) => (
-											<TableCell key={cell.id} className="border border-gray-200">
-												{flexRender(
-													cell.column.columnDef.cell,
-													cell.getContext()
-												)}
+			{
+				isConnected ?
+					<div className="w-[95%] mx-auto mt-16 rounded-xl px-5 py-3 bg-white">
+						<div className="flex items-center py-4 justify-between">
+							<Label className="text-3xl font-bold ml-7">{displayType}</Label>
+							<Input className="max-w-sm" placeholder="Filter by TOKEN 0"
+								value={(table.getColumn("token0")?.getFilterValue() as string) ?? ""}
+								onChange={(event) => table.getColumn("token0")?.setFilterValue(event.target.value)}
+							/>
+						</div>
+						<div className="rounded-md border mb-5">
+							<Table>
+								<TableHeader>
+									{table.getHeaderGroups().map((headerGroup) => (
+										<TableRow key={headerGroup.id}>
+											{headerGroup.headers.map((header) => {
+												return (
+													<TableHead key={header.id} className="border border-gray-200 text-center">
+														{header.isPlaceholder
+															? null
+															: flexRender(
+																header.column.columnDef.header,
+																header.getContext()
+															)}
+													</TableHead>
+												);
+											})}
+										</TableRow>
+									))}
+								</TableHeader>
+								<TableBody className="text-center">
+									{table.getRowModel().rows?.length ? (
+										table.getRowModel().rows.map((row) => (
+											<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+												{row.getVisibleCells().map((cell) => (
+													<TableCell key={cell.id} className="border border-gray-200">
+														{flexRender(
+															cell.column.columnDef.cell,
+															cell.getContext()
+														)}
+													</TableCell>
+												))}
+											</TableRow>
+										))
+									) : (
+										<TableRow>
+											<TableCell colSpan={columns.length} className="h-24 text-center">
+												{isLoading}
 											</TableCell>
-										))}
-									</TableRow>
-								))
-							) : (
-								<TableRow>
-									<TableCell colSpan={columns.length} className="h-24 text-center">
-										{isLoading}
-									</TableCell>
-								</TableRow>
-							)}
-						</TableBody>
-					</Table>
-				</div>
-				<TablePagination table={table} />
-			</div>
+										</TableRow>
+									)}
+								</TableBody>
+							</Table>
+						</div>
+						<TablePagination table={table} />
+					</div>
+					: <div className="w-full h-full flex items-center justify-center">
+						<p className="text-5xl font-bold">
+							You have to connect Wallet!
+						</p>
+					</div>
+			}
 		</>
 	);
 }
