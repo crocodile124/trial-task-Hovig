@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { useEffect } from "react";
 import {
 	ColumnDef,
@@ -24,7 +23,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "../ui/table";
-import { DataTablePagination } from "./tablePagination";
+import { TablePagination } from "./TablePagination";
 import { Label } from "../ui/label";
 import { getTableData } from "@/lib/fetchData";
 
@@ -43,14 +42,14 @@ export type DataType = {
 
 export const columns: ColumnDef<DataType>[] = [
 	{
-		accessorKey: "token0.symbol",
+		accessorKey: "token0",
 		header: "TOKEN 0",
 		cell: ({ row }) => (
 			<div className="capitalize">{row.original.token0.symbol}</div>
 		),
 	},
 	{
-		accessorKey: "token1.symbol",
+		accessorKey: "token1",
 		header: "TOKEN 1",
 		cell: ({ row }) => (
 			<div className="capitalize">{row.original.token1.symbol}</div>
@@ -95,6 +94,7 @@ export function MyTable({ setter }: any) {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+	const [isLoading, setIsLoading] = useState("No results");
 
 	const table = useReactTable({
 		data,
@@ -116,17 +116,23 @@ export function MyTable({ setter }: any) {
 		let uniswapData : any, pancakeswapData: any;
 		switch (displayType) {
 			case "All":
+				setIsLoading("Loading Data...");
 				uniswapData = await getTableData(UNISWAP_URL);
 				pancakeswapData = await getTableData(PANCAKESWAP_URL);
 				setData([...uniswapData, ...pancakeswapData] as DataType[]);
+				setIsLoading("No results!");
 				break;
 			case "Uniswap":
+				setIsLoading("Loading Data...");
 				uniswapData = await getTableData(UNISWAP_URL);
 				setData(uniswapData as DataType[]);
+				setIsLoading("No results!");
 				break;
 			case "Pancakeswap":
+				setIsLoading("Loading Data...");
 				pancakeswapData = await getTableData(PANCAKESWAP_URL);
 				setData(pancakeswapData as DataType[]);
+				setIsLoading("No results!");
 				break;
 		}
 	};
@@ -136,40 +142,14 @@ export function MyTable({ setter }: any) {
 	}, [displayType]);
 
 	return (
-		<div>
+		<>
 			<nav className="z-20 h-[80px] bg-gray-700 flex items-center justify-between w-full">
 				<ul className="text-white text-lg flex items-center justify-between w-[300px] mx-3">
 					<li className="lg:hidden">
 						<Button className="text-4xl flex text-white bg-none m-0 shadow-none" onClick={() => {
 							setter((oldVal: any) => !oldVal);
 						}}>
-							<svg viewBox="0 0 48 48" width="30px" height="30px">
-								<linearGradient id="EIPc0qTNCX0EujYwtxKaXa" x1="12.066" x2="34.891" y1=".066" y2="22.891" gradientUnits="userSpaceOnUse">
-									<stop offset=".237" stopColor="#3bc9f3" />
-									<stop offset=".85" stopColor="#1591d8" />
-								</linearGradient>
-								<path fill="url(#EIPc0qTNCX0EujYwtxKaXa)" d="M43,15H5c-1.1,0-2-0.9-2-2v-2c0-1.1,0.9-2,2-2h38c1.1,0,2,0.9,2,2v2C45,14.1,44.1,15,43,15z" />
-								<linearGradient id="EIPc0qTNCX0EujYwtxKaXb" x1="12.066" x2="34.891" y1="12.066" y2="34.891" gradientUnits="userSpaceOnUse">
-									<stop offset=".237" stopColor="#3bc9f3" />
-									<stop offset=".85" stopColor="#1591d8" />
-								</linearGradient>
-								<path fill="url(#EIPc0qTNCX0EujYwtxKaXb)" d="M43,27H5c-1.1,0-2-0.9-2-2v-2c0-1.1,0.9-2,2-2h38c1.1,0,2,0.9,2,2v2C45,26.1,44.1,27,43,27z" />
-								<linearGradient
-									id="EIPc0qTNCX0EujYwtxKaXc"
-									x1="12.066"
-									x2="34.891"
-									y1="24.066"
-									y2="46.891"
-									gradientUnits="userSpaceOnUse"
-								>
-									<stop offset=".237" stopColor="#3bc9f3" />
-									<stop offset=".85" stopColor="#1591d8" />
-								</linearGradient>
-								<path
-									fill="url(#EIPc0qTNCX0EujYwtxKaXc)"
-									d="M43,39H5c-1.1,0-2-0.9-2-2v-2c0-1.1,0.9-2,2-2h38c1.1,0,2,0.9,2,2v2C45,38.1,44.1,39,43,39z"
-								/>
-							</svg>
+							<img src="./img/sidebar-small.png" width="32px" height="32px" className="min-w-8 min-h-8"/>
 						</Button>
 					</li>
 					<li className="ml-2 lg:ml-8 cursor-pointer" onClick={() => setDisplayType("All")}>
@@ -187,8 +167,8 @@ export function MyTable({ setter }: any) {
 				<div className="flex items-center py-4 justify-between">
 					<Label className="text-3xl font-bold ml-7">{displayType}</Label>
 					<Input className="max-w-sm" placeholder="Filter by TXN"
-						value={(table.getColumn("token0.symbol")?.getFilterValue() as string) ?? ""}
-						onChange={(event) => table.getColumn("token0.symbol")?.setFilterValue(event.target.value)}
+						value={(table.getColumn("txCount")?.getFilterValue() as string) ?? ""}
+						onChange={(event) => table.getColumn("txCount")?.setFilterValue(event.target.value)}
 					/>
 				</div>
 				<div className="rounded-md border mb-5">
@@ -227,19 +207,16 @@ export function MyTable({ setter }: any) {
 								))
 							) : (
 								<TableRow>
-									<TableCell
-										colSpan={columns.length}
-										className="h-24 text-center"
-									>
-										Loading Data...
+									<TableCell colSpan={columns.length} className="h-24 text-center">
+										{isLoading}
 									</TableCell>
 								</TableRow>
 							)}
 						</TableBody>
 					</Table>
 				</div>
-				<DataTablePagination table={table} />
+				<TablePagination table={table} />
 			</div>
-		</div>
+		</>
 	);
 }

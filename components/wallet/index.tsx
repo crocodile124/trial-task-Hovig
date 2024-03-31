@@ -28,12 +28,7 @@ export default function ConnectWallet() {
           <ConnectButton.Custom>
             {({ account, chain, authenticationStatus, mounted }) => {
               const ready = mounted && authenticationStatus !== "loading";
-              const connected =
-                ready &&
-                account &&
-                chain &&
-                (!authenticationStatus ||
-                  authenticationStatus === "authenticated");
+              const connected = ready && account && chain && (!authenticationStatus || authenticationStatus === "authenticated");
               return (
                 <div>
                   {(() => {
