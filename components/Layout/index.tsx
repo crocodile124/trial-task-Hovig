@@ -1,7 +1,7 @@
 // @/components/Layout/index.js
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
-import { MyTable } from "../Table";
+import { MyTable } from "../DataTable";
 
 export default function Layout() {
   const [showSidebar, setShowSidebar] = useState(false);
