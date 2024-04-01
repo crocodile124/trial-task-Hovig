@@ -11,6 +11,7 @@ import {
 	getFilteredRowModel,
 	getPaginationRowModel,
 	useReactTable,
+	getSortedRowModel
 } from "@tanstack/react-table";
 import { getTableData } from "@/lib/fetchData";
 import { useState } from "react";
@@ -26,6 +27,7 @@ import {
 	TableRow,
 } from "../ui/table";
 import { TablePagination } from "./TablePagination";
+import { ArrowUpDown } from "lucide-react"
 
 export type DataType = {
 	token0: string;
@@ -39,42 +41,108 @@ export type DataType = {
 export const columns: ColumnDef<DataType>[] = [
 	{
 		accessorKey: "token0",
-		header: "TOKEN 0",
+		header: ({ column }) => {
+			return (
+				<Button
+					className="flex  bg-none m-0 shadow-none text-black hover:scale-100"
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					TOKEN 0
+					<ArrowUpDown className="ml-2 h-4 w-4 text-blue-500" />
+				</Button>
+			)
+		},
 		cell: ({ row }) => (
 			<div className="capitalize">{row.getValue("token0")}</div>
 		),
 	},
 	{
 		accessorKey: "token1",
-		header: "TOKEN 1",
+		header: ({ column }) => {
+			return (
+				<Button
+					className="flex  bg-none m-0 shadow-none text-black hover:scale-100"
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					TOKEN 1
+					<ArrowUpDown className="ml-2 h-4 w-4 text-blue-500" />
+				</Button>
+			)
+		},
 		cell: ({ row }) => (
 			<div className="capitalize">{row.getValue("token1")}</div>
 		),
 	},
 	{
 		accessorKey: "totalValueLockedUSD",
-		header: "AMOUNT",
+		header: ({ column }) => {
+			return (
+				<Button
+					className="flex  bg-none m-0 shadow-none text-black hover:scale-100"
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					AMOUNT
+					<ArrowUpDown className="ml-2 h-4 w-4 text-blue-500" />
+				</Button>
+			)
+		},
 		cell: ({ row }) => (
 			<div className="capitalize"><span className="font-bold">$</span>{row.getValue("totalValueLockedUSD")}</div>
 		),
 	},
 	{
 		accessorKey: "txCount",
-		header: "TXN",
+		header: ({ column }) => {
+			return (
+				<Button
+					className="flex  bg-none m-0 shadow-none text-black hover:scale-100"
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					TXN
+					<ArrowUpDown className="ml-2 h-4 w-4 text-blue-500" />
+				</Button>
+			)
+		},
 		cell: ({ row }) => (
 			<div className="capitalize">{row.getValue("txCount")}</div>
 		),
 	},
 	{
 		accessorKey: "volumeUSD",
-		header: "VOLUME",
+		header: ({ column }) => {
+			return (
+				<Button
+					className="flex  bg-none m-0 shadow-none text-black hover:scale-100"
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					VOLUME
+					<ArrowUpDown className="ml-2 h-4 w-4 text-blue-500" />
+				</Button>
+			)
+		},
 		cell: ({ row }) => (
 			<div className="capitalize"><span className="font-bold">$</span>{row.getValue("volumeUSD")}</div>
 		),
 	},
 	{
 		accessorKey: "liquidity",
-		header: "LIQUIDITY",
+		header: ({ column }) => {
+			return (
+				<Button
+					className="flex  bg-none m-0 shadow-none text-black hover:scale-100"
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					LIQUIDITY
+					<ArrowUpDown className="ml-2 h-4 w-4 text-blue-500" />
+				</Button>
+			)
+		},
 		cell: ({ row }) => (
 			<div className="capitalize"><span className="font-bold">$</span>{row.getValue("liquidity")}</div>
 		),
@@ -98,6 +166,7 @@ export function MyTable({ setter, isConnected }: any) {
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
+		getSortedRowModel: getSortedRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,

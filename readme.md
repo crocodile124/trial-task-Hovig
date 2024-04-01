@@ -1,7 +1,7 @@
-<div align="center" style="font-size: 30px"><strong>Trial Task</strong></div>
+<div align="center" style="font-size:30px"><strong>Trial Task</strong></div>
 <br />
 <div align="center">
-<a href="https://trial-task-hovig-zombie.vercel.app">View Demo</a>
+<a href="https://trial-task-hovig-zombie.vercel.app" target="_blank">View Demo</a>
 <span>
 </div>
 
