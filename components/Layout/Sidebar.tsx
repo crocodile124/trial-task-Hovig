@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import ConnectWallet from "@/components/WalletConnection";
 import { Button } from "../ui/button";
 
-export default function Sidebar({ show, setter }: any) {
+export default function Sidebar({ show, setter, setIsConnected }: any) {
   const { data: session } = useSession();
   const user = session?.user;
   const className =
@@ -24,7 +24,7 @@ export default function Sidebar({ show, setter }: any) {
       <div className={`${className}${appendClass}`}>
         <div className="h-full w-full">
           <div className="h-1/3 flex flex-col items-center justify-center ">
-            <ConnectWallet />
+            <ConnectWallet setIsConnected={setIsConnected} />
           </div>
           <div className="h-1/3 flex items-center justify-center">
             <img src="./img/ethereum.svg" width="50" height="100" />

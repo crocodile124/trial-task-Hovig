@@ -4,9 +4,7 @@ import { WagmiProvider } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ConnectButton, getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { ConnectButtonRenderer } from "@rainbow-me/rainbowkit/dist/components/ConnectButton/ConnectButtonRenderer";
 import { Account } from "./Account";
-import connectStore from "../store/connect.store";
 
 import "@rainbow-me/rainbowkit/styles.css";
 
@@ -19,7 +17,7 @@ const config = getDefaultConfig({
   ssr: true,
 });
 
-export default function ConnectWallet() {
+export default function ConnectWallet({ setIsConnected } : any) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
@@ -32,10 +30,10 @@ export default function ConnectWallet() {
                 <div>
                   {(() => {
                     if (!connected) {
-                      connectStore.setConnect(false);
+                      setIsConnected(false);
                       return <ConnectButton />;
                     } else {
-                      connectStore.setConnect(true);
+                      setIsConnected(true);
                       return <Account />;
                     }
                   })()}
