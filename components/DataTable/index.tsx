@@ -234,7 +234,7 @@ export function MyTable({ setter, isConnected }: any) {
 			</nav>
 			{
 				isConnected ?
-					<div className="w-[95%] mx-auto mt-16 rounded-xl px-5 py-3 bg-white">
+					<div className="w-[95%] mx-auto my-auto rounded-xl px-5 py-3 bg-white">
 						<div className="flex items-center py-4 justify-between">
 							<Label className="text-3xl font-bold ml-7">{displayType}</Label>
 							<Input className="max-w-sm" placeholder="Filter by TOKEN 0"
